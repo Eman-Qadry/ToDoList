@@ -8,5 +8,8 @@
     "start": "node server.js"
   },
   "author": "Eman-Qadry",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.1.4"
+  }
 }
