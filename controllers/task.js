@@ -1,4 +1,5 @@
 const task=require('../models/task');
+const {validationResult}=require('express-validator')
 exports.getTasks=(req,res,next)=>{
     userId=req.body.userId;
     task.find({userId: userId}).then(tasks=>{
@@ -19,7 +20,7 @@ exports.getTasks=(req,res,next)=>{
     })
 }
 
-expoerts.getTask=(req,res,next)=>{
+exports.getTaskById=(req,res,next)=>{
     const id=req.params.id;
     task.findById(id).then(task=>{
    if (!task){
@@ -37,7 +38,11 @@ expoerts.getTask=(req,res,next)=>{
         return res.status(404).json({ message: err.message });
     })
 }
-expoerts.createTask=(req,res,next)=>{
+exports.createTask=(req,res,next)=>{
+    const errors= validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() });
+    }
     const newTask= new task({
      title:req.body.title,
      description:req.body.description,
@@ -75,6 +80,10 @@ exports.deleteTask=(req,res,next)=>{
      })
 }
 exports.EditTask=(req,res,next)=>{
+    const errors= validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() });
+    }
     task.findOneAndUpdate(
         { _id: req.params.id, user: req.user.id },req.body).then(updated=>{
             res.status(200).json({ message:"Task updated successfully",
