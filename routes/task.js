@@ -2,6 +2,7 @@ const express=require('express');
 const router=express.Router();
 const taskController= require('../controllers/task');
 const {check}=require('express-validator');
+const isAuth=require('../middleware/is-auth');
 const createTaskValidationRules = [
     check('title')
     .notEmpty().withMessage('Title is required')
@@ -34,14 +35,14 @@ const createTaskValidationRules = [
 ];
 router
 .route('/')
-.get(taskController.getTasks)
-.post(createTaskValidationRules,taskController.createTask);
+.get(isAuth,taskController.getTasks)
+.post(isAuth,createTaskValidationRules,taskController.createTask);
 
 router
 .route('/:id')
-.get(taskController.getTaskById)
-.patch(createTaskValidationRules,taskController.EditTask)
-.delete(taskController.deleteTask);
+.get(isAuth,taskController.getTaskById)
+.patch(isAuth,createTaskValidationRules,taskController.EditTask)
+.delete(isAuth,taskController.deleteTask);
 
 
 module.exports = router;

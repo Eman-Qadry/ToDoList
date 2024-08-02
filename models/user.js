@@ -17,5 +17,9 @@ const userSchema=new schema({
         type: String,
 
     }
+    , tasks:[{
+   type:mongoose.SchemaTypes.ObjectId,
+    ref:'Task'
+    }]
 })
 module.exports=mongoose.model('User',userSchema);
